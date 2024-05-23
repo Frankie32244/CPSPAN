@@ -165,6 +165,16 @@ def train_align(model, opt_align, args, device, X, Y, Miss_vecs):
 
 if __name__=='__main__':
     my_data_dic = loader.ALL_data
+    
+    # 数据集导入：
+    # ALL_data = dict(
+    #     Caltech101_7 = {1: 'Caltech101_7', 'N': 1400, 'K': 7, 'V': 5, 'n_input': [1984, 512, 928, 254, 40]},
+    #     HandWritten = {1: 'HandWritten', 'N': 2000, 'K': 10, 'V': 6, 'n_input': [216, 76, 64, 6, 240, 47]},
+    #     ALOI_100 = {1: 'ALOI-100', 'N': 10800, 'K': 100, 'V': 4, 'n_input': [77, 13, 64, 125]},
+    #     YouTubeFace10_4Views = {1: 'YouTubeFace10_4Views', 'N': 38654, 'K': 10, 'V':4, 'n_input': [944,576,512,640]},
+    #     EMNIST_digits_4Views = {1: 'EMNIST_digits_4Views', 'N': 280000, 'K': 10, 'V': 4, 'n_input': [944,576,512,640]},
+    # )
+    
     for i_d in my_data_dic:
         data_para = my_data_dic[i_d]  # 改
         print(data_para)
@@ -179,8 +189,10 @@ if __name__=='__main__':
         pre_epochs = 200  # 200 预训练epoch
         feature_dim = 10  # embedding维度, 等于clusters
 
+        # ??? 
         seed_everything(42)  # 应用不同的种子产生可复现的结果
 
+        # 参数解析
         parser = argparse.ArgumentParser(description='main')
         parser.add_argument('--dataset', default=data_para)
         parser.add_argument('--batch_size', default=Batch, type=int)
@@ -198,21 +210,23 @@ if __name__=='__main__':
         parser.add_argument("--view_dims", default=data_para['n_input'])
         parser.add_argument("--view_meaning", default=data_para['view_meaning'])
 
+        # 打印参数
         args = parser.parse_args()
         print('+' * 30, ' Parameters ', '+' * 30)
         print(args)
         print('+' * 75)
 
+        # ??? 
         X, Y, missindex, X_com, Y_com, index_com, index_incom = loader.load_data(args.dataset, args.missrate)
         Miss_vecs = []
         for v in range(args.V):
             Miss_vecs.append(missindex[:, v])
 
-        model = Network(args.V, args.view_dims, args.feature_dim).to(device)
-        optimizer_pretrain = torch.optim.Adam(model.parameters(), lr=args.lr_pre)
-        fea_emb = pretrain(model, optimizer_pretrain, args, device, X_com, Y_com)
-        optimizer_align = torch.optim.Adam(model.parameters(), lr=args.lr_align)
-        fea_end = train_align(model, optimizer_align, args, device, X, Y, Miss_vecs)
+        model = Network(args.V, args.view_dims, args.feature_dim).to(device)      ### 建立model
+        optimizer_pretrain = torch.optim.Adam(model.parameters(), lr=args.lr_pre) ### 预训练
+        fea_emb = pretrain(model, optimizer_pretrain, args, device, X_com, Y_com) ### 特征提取
+        optimizer_align = torch.optim.Adam(model.parameters(), lr=args.lr_align)  ### 优化对齐
+        fea_end = train_align(model, optimizer_align, args, device, X, Y, Miss_vecs)  ### 训练对齐
 
         for v in range(args.V):
             fea_end[v] = fea_end[v].cpu()
