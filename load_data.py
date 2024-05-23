@@ -16,7 +16,7 @@ ALL_data = dict(
     EMNIST_digits_4Views = {1: 'EMNIST_digits_4Views', 'N': 280000, 'K': 10, 'V': 4, 'n_input': [944,576,512,640]},
 )
 
-path = 'D:/MultiView Dataset/'
+path = 'D:/MultiView Dataset/'   # 存在了D盘的MultiView DataSet 文件夹中
 
 
 def get_mask(view_num, alldata_len, missing_rate):
