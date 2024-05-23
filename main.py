@@ -1,5 +1,5 @@
 import torch
-from Nmetrics import evaluate
+from Nmetrics import evaluate                   #自己定义的Nmetrics.py 导入的evaluate函数
 import numpy as np
 from tqdm import tqdm
 import torch.nn as nn
@@ -29,6 +29,7 @@ def seed_everything(SEED=42):  # 应用不同的种子产生可复现的结果
     torch.backends.cudnn.benchmark = True  # keep True if all the input have same size.
 
 
+# 预训练
 def pretrain(model, opt_pre, args, device, X_com, Y_com):
     train_dataset = TrainDataset_Com(X_com, Y_com)
     batch_sampler = Data_Sampler(train_dataset, shuffle=True, batch_size=args.batch_size, drop_last=False)
@@ -75,7 +76,7 @@ def pretrain(model, opt_pre, args, device, X_com, Y_com):
 
     return fea_emb
 
-
+# 训练对齐模型
 def train_align(model, opt_align, args, device, X, Y, Miss_vecs):
     train_dataset = TrainDataset_All(X, Y, Miss_vecs)
     batch_sampler = Data_Sampler(train_dataset, shuffle=True, batch_size=args.Batch_Align, drop_last=True)
