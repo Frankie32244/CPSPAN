@@ -17,7 +17,7 @@ def calculate_cost_matrix(C, n_clusters):
             cost_matrix[j,i] = s-t
     return cost_matrix
 
-
+# 从index获取cluster的标签
 def get_cluster_labels_from_indices(indices):
     n_clusters = len(indices)
     clusterLabels = np.zeros(n_clusters)
@@ -25,7 +25,7 @@ def get_cluster_labels_from_indices(indices):
         clusterLabels[i] = indices[i][1]
     return clusterLabels
 
-
+# ??? 
 def get_y_preds(y_true, cluster_assignments, n_clusters):
 
     confusion_matrix = metrics.confusion_matrix(y_true, cluster_assignments, labels=None)
@@ -39,7 +39,7 @@ def get_y_preds(y_true, cluster_assignments, n_clusters):
     y_pred = kmeans_to_true_cluster_labels[cluster_assignments]
     return y_pred
 
-
+# 计算F-mean、precision、recall 三个指标
 def fmetric(y_true, y_pred, n_clusters):
     y_pred_ajusted = get_y_preds(y_true, y_pred, n_clusters)
     # F-score
@@ -51,7 +51,7 @@ def fmetric(y_true, y_pred, n_clusters):
     return f_score, precision, recall
 
 
-
+# 计算Purity 
 def Purity_score(y_true, y_pred):
     y_voted_labels = np.zeros(y_true.shape)
     labels = np.unique(y_true)
@@ -70,7 +70,7 @@ def Purity_score(y_true, y_pred):
     purity = metrics.accuracy_score(y_true, y_voted_labels)
     return purity
 
-
+# 计算ACC
 def cluster_acc(y_true, y_pred):
     y_true = y_true.astype(np.int64)
     assert y_pred.size == y_true.size
@@ -84,7 +84,7 @@ def cluster_acc(y_true, y_pred):
     acc = sum([w[i, j] for i, j in ind]) * 1.0 / y_pred.size
     return acc
 
-
+# 总evaluate函数，返回acc,nmi,purity,fscore,precision,recall,ari.
 def evaluate(truth, prediction):
     unique = np.unique(truth)
     n_clusters = np.size(unique, axis=0)
