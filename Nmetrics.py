@@ -5,7 +5,7 @@ from munkres import Munkres
 # from sklearn.utils.linear_assignment_ import linear_assignment
 from scipy.optimize import linear_sum_assignment
 
-
+# 计算cost_matrix, cost_matrix 后续会用于匈牙利算法（Munkres算法）进行最优匹配。
 def calculate_cost_matrix(C, n_clusters):
     cost_matrix = np.zeros((n_clusters, n_clusters))
 
@@ -25,7 +25,7 @@ def get_cluster_labels_from_indices(indices):
         clusterLabels[i] = indices[i][1]
     return clusterLabels
 
-# ??? 
+# 返回预测标签，返回预测标签的作用是为了把聚类算法分出的组和真实的类别对应起来。这样我们就可以看出聚类算法分组的效果如何？
 def get_y_preds(y_true, cluster_assignments, n_clusters):
 
     confusion_matrix = metrics.confusion_matrix(y_true, cluster_assignments, labels=None)
@@ -84,7 +84,7 @@ def cluster_acc(y_true, y_pred):
     acc = sum([w[i, j] for i, j in ind]) * 1.0 / y_pred.size
     return acc
 
-# 总evaluate函数，返回acc,nmi,purity,fscore,precision,recall,ari.
+# 总evaluate函数，返回acc,nmi,purity,fscore,precision,recall,ari几个指标
 def evaluate(truth, prediction):
     unique = np.unique(truth)
     n_clusters = np.size(unique, axis=0)
