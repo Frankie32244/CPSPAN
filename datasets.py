@@ -4,7 +4,7 @@ import scipy.io as sio
 import torch
 from torch.utils.data.sampler import SequentialSampler, RandomSampler
 
-
+# TrainDataset_Com 类继承自 torch.utils.data.Dataset，用于处理多视图数据集。
 class TrainDataset_Com(torch.utils.data.Dataset):
     def __init__(self, X_list, Y_list):
         self.X_list = X_list                            # 特征数据
@@ -27,7 +27,7 @@ class TrainDataset_Com(torch.utils.data.Dataset):
         # return the total size of data
         return self.X_list[0].shape[0]                 # 第一个视图的样本数量
 
-
+# TrainDataset_All 类继承自 torch.utils.data.Dataset，类似于 TrainDataset_Com，但多了一个缺失数据的处理。
 class TrainDataset_All(torch.utils.data.Dataset):
     def __init__(self, X_list, Y_list, Miss_list):
         self.X_list = X_list
@@ -55,7 +55,7 @@ class TrainDataset_All(torch.utils.data.Dataset):
         # return the total size of data
         return self.X_list[0].shape[0]
 
-
+# Data_Sampler 类用于自定义数据采样方式，可以选择顺序采样或随机采样，并按批次返回数据。
 class Data_Sampler(object):
     """Custom Sampler is required. This sampler prepares batch by passing list of
     data indices instead of running over individual index as in pytorch sampler"""
