@@ -176,20 +176,20 @@ if __name__=='__main__':
     # )
     
     for i_d in my_data_dic:
-        data_para = my_data_dic[i_d]  # 改
+        data_para = my_data_dic[i_d]  
         print(data_para)
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        missrate = 0.5  # 缺失率
-        align_epochs = 50
-        lr_pre = 0.0005  # 0.0005 预训练学习率
-        lr_align = 0.0001  # 0.0001 对齐学习率
-        Batch = 256  # 256  预训练阶段batch_size
-        Batch_Align = 256  # 对齐阶段batch_size
-        para_loss = [1e-3, 1e-3]  # 超参数
-        pre_epochs = 200  # 200 预训练epoch
-        feature_dim = 10  # embedding维度, 等于clusters
+        missrate = 0.5                  # 缺失率
+        align_epochs = 50               # 对齐的epochs数
+        lr_pre = 0.0005                 # 0.0005 预训练学习率
+        lr_align = 0.0001               # 0.0001 对齐学习率
+        Batch = 256                     # 256  预训练阶段batch_size
+        Batch_Align = 256               # 对齐阶段batch_size
+        para_loss = [1e-3, 1e-3]        # 超参数
+        pre_epochs = 200                # 200 预训练epoch
+        feature_dim = 10                # embedding维度, 
 
-        # ??? 
+       
         seed_everything(42)  # 应用不同的种子产生可复现的结果
 
         # 参数解析
@@ -216,18 +216,21 @@ if __name__=='__main__':
         print(args)
         print('+' * 75)
 
-        # ??? 
+        # 加载数据集，生成缺失索引Miss_vecs
         X, Y, missindex, X_com, Y_com, index_com, index_incom = loader.load_data(args.dataset, args.missrate)
         Miss_vecs = []
         for v in range(args.V):
             Miss_vecs.append(missindex[:, v])
 
+        # 模型初始化和训练
         model = Network(args.V, args.view_dims, args.feature_dim).to(device)      ### 建立model
         optimizer_pretrain = torch.optim.Adam(model.parameters(), lr=args.lr_pre) ### 预训练
         fea_emb = pretrain(model, optimizer_pretrain, args, device, X_com, Y_com) ### 特征提取
         optimizer_align = torch.optim.Adam(model.parameters(), lr=args.lr_align)  ### 优化对齐
         fea_end = train_align(model, optimizer_align, args, device, X, Y, Miss_vecs)  ### 训练对齐
 
+
+        # 补充缺失视图
         for v in range(args.V):
             fea_end[v] = fea_end[v].cpu()
         fea_final = []
@@ -266,6 +269,7 @@ if __name__=='__main__':
         for v in range(args.V):
             fea_final[v] = torch.tensor(fea_final[v])
 
+        # 聚类和打印指标参数
         Labels = Y[0]
         estimator = KMeans(n_clusters=args.K)
 
