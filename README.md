@@ -3,6 +3,6 @@ An official source code for paper Deep Incomplete Multi-view Clustering with Cro
 
 ```linux
 |---Nmetrics.py        总evaluate函数，返回acc,nmi,purity,fscore,precision,recall,ari几个指标
-|---alignment.py       对齐模块、3.3 那一章节
+|---alignment.py       对齐模块、对应文章3.3 那一章节
 |---loss.py            
 ```
