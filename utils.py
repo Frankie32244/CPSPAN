@@ -9,7 +9,7 @@ from kmeans_gpu import kmeans
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# 得到归一化的向量在二维中位于单位圆内, 在高维中位于超球内, 且向量模为1
+# 归一化函数 NormalizeFeaTorch 的作用是将特征矩阵进行归一化处理，使每个特征向量的模为1
 def NormalizeFeaTorch(features):  # features为nxd维的特征矩阵
     rowsum = torch.tensor((features ** 2).sum(1))
     r_inv = torch.pow(rowsum, -0.5)
@@ -19,12 +19,12 @@ def NormalizeFeaTorch(features):  # features为nxd维的特征矩阵
     return normalized_feas
 
 
-# 求特征矩阵fea_mat1(nxd)和fea_mat2(nxd)的行向量之间的余弦相似度，得similarity为nxn的相似度矩阵, 元素取值范围为[-1,1]
+# 计算 fea_mat1 和 feat_mat2 两个特征矩阵之间的余弦相似度
 def get_Similarity(fea_mat1, fea_mat2):
     Sim_mat = F.cosine_similarity(fea_mat1.unsqueeze(1), fea_mat2.unsqueeze(0), dim=-1)
     return Sim_mat
 
-
+# 利用kmeans进行聚类
 def clustering(feature, cluster_num):
     # predict_labels,  cluster_centers = kmeans(X=feature, num_clusters=cluster_num, distance='euclidean', device=torch.device('cuda'))
     predict_labels,  cluster_centers = kmeans(X=feature, num_clusters=cluster_num, distance='euclidean', device=device)
@@ -33,7 +33,7 @@ def clustering(feature, cluster_num):
     # return 100 * acc, 100 * nmi, 100 * ari, 100 * f1, predict_labels.numpy(), initial
 
 
-
+# 计算欧式距离
 def euclidean_dist(x, y, root=False):
     """
     Args:
