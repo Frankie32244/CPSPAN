@@ -7,17 +7,17 @@ from torch.utils.data.sampler import SequentialSampler, RandomSampler
 
 class TrainDataset_Com(torch.utils.data.Dataset):
     def __init__(self, X_list, Y_list):
-        self.X_list = X_list
-        self.Y_list = Y_list
-        self.view_size = len(X_list)
+        self.X_list = X_list                            # 特征数据
+        self.Y_list = Y_list                            # 标签数据
+        self.view_size = len(X_list)                    # view_size，X_list的大小，视图的数量
 
     def __getitem__(self, index):
         current_x_list = []
         current_y_list = []
         for v in range(self.view_size):
-            current_x = self.X_list[v][index]
-            current_x_list.append(current_x)
-            current_y = self.Y_list[v][index]
+            current_x = self.X_list[v][index]           # 获取第 v 个视图的特征数据。
+            current_x_list.append(current_x)             
+            current_y = self.Y_list[v][index]           # 获取第 v 个视图的标签数据。
             current_y_list.append(current_y)
         # X_list1 = self.X_list
         # Y_list1 = self.Y_list
@@ -25,7 +25,7 @@ class TrainDataset_Com(torch.utils.data.Dataset):
 
     def __len__(self):
         # return the total size of data
-        return self.X_list[0].shape[0]
+        return self.X_list[0].shape[0]                 # 第一个视图的样本数量
 
 
 class TrainDataset_All(torch.utils.data.Dataset):
