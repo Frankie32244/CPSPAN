@@ -4,7 +4,7 @@ An official source code for paper Deep Incomplete Multi-view Clustering with Cro
 ```linux
 |---Nmetrics.py        总evaluate函数，返回acc,nmi,purity,fscore,precision,recall,ari几个指标
 |---alignment.py       对齐模块、对应文章3.3 那一章节
-|---datasets.py        
+|---datasets.py        处理多视图数据集
 |---kmeans_gpu.py      kmeans 聚类算法
 |---load_data.py       从数据集当中导入数据
 |---loss.py            计算了原型对齐和实例对齐的损失(Instance_loss和Prototype_loss)
