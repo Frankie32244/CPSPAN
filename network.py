@@ -5,7 +5,7 @@ import torch
 
 class Encoder(nn.Module):
     def __init__(self, input_dim, feature_dim):    # input_dim 输入数据的特征维度,feature_dim 是输出数据特征的维度
-        super(Encoder, self).__init__()
+        super(Encoder, self).__init__()            # 调用父类 nn.Module 的初始化方法
         self.encoder = nn.Sequential(
             nn.Linear(input_dim, 500),             # 一个线性层，将输入维度从 input_dim 映射到 500
             nn.ReLU(),                             # 一个非线性激活函数，添加非线性特性
