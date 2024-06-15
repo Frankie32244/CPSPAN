@@ -29,7 +29,7 @@ def seed_everything(SEED=42):  # 应用不同的种子产生可复现的结果
     torch.backends.cudnn.benchmark = True  # keep True if all the input have same size.
 
 
-# 预训练
+# 预训练（训练模型，提取特征嵌入，返回fea_emb)
 def pretrain(model, opt_pre, args, device, X_com, Y_com):
     train_dataset = TrainDataset_Com(X_com, Y_com)
     batch_sampler = Data_Sampler(train_dataset, shuffle=True, batch_size=args.batch_size, drop_last=False)
