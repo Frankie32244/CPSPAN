@@ -86,7 +86,7 @@ def train_align(model, opt_align, args, device, X, Y, Miss_vecs):
     for epoch in t_progress:
         for batch_idx, (x, y, miss_vec) in enumerate(train_loader):
             opt_align.zero_grad()
-            ###### 计算loss_recon ######
+            ###### 计算loss_recon 重构损失######
             loss_fn = torch.nn.MSELoss().to(device)
             loss_list_recon = []
             for v in range(args.V):
@@ -98,7 +98,7 @@ def train_align(model, opt_align, args, device, X, Y, Miss_vecs):
                 loss_list_recon.append(loss_fn(x[v][miss_vec[v]>0], xr[v][miss_vec[v]>0]))
             loss_recon = sum(loss_list_recon)
 
-            ###### 计算loss_ins_align ######
+            ###### 计算loss_ins_align  计算实例对齐损失######
             criterion_ins = Instance_Align_Loss().to(device)
             loss_list_ins = []
             for v1 in range(args.V):
@@ -116,7 +116,7 @@ def train_align(model, opt_align, args, device, X, Y, Miss_vecs):
                     l_tmp2 = criterion_ins(gt, Dx)
                     loss_list_ins.append(l_tmp2)
             loss_ins_align = sum(loss_list_ins)
-
+            ###### 计算Proto_Align_loss 计算原型对其损失######
             criterion_proto = Proto_Align_Loss().to(device)
             loss_list_pro = []
             for v1 in range(args.V):
